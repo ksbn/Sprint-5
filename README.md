@@ -1,11 +1,36 @@
-Link to the coursework
-https://sdc.codeyourfuture.io/tools/sprints/5/prep/
+In the prep, there was an exercise around finding possible laptops for a group of people.
 
-Why are we doing this?
-Read the prep and do all of the exercises in it.
+Your exercise is to extend this to actually allocate laptops to the people.
 
-Maximum time in hours
-5
+Given these class definitions:
 
-How to submit
-Submit a pull request to this repo from your fork, containing a single Python file per exercise.
+from dataclasses import dataclass
+from enum import Enum
+from typing import List
+
+class OperatingSystem(Enum):
+    MACOS = "macOS"
+    ARCH = "Arch Linux"
+    UBUNTU = "Ubuntu"
+
+@dataclass(frozen=True)
+class Person:
+    name: str
+    age: int
+    # Sorted in order of preference, most preferred is first.
+    preferred_operating_system: List[OperatingSystem]
+
+
+@dataclass(frozen=True)
+class Laptop:
+    id: int
+    manufacturer: str
+    model: str
+    screen_size_in_inches: float
+    operating_system: OperatingSystem
+Write a function with this signature:
+
+def allocate_laptops(people: List[Person], laptops: List[Laptop]) -> Dict[Person, Laptop]:
+Every person should be allocated exactly one laptop.
+
+If we define "sadness" as the number of places down in someone's ranking the operating system the ended up with (i.e. if your preferences were [UBUNTU, ARCH, MACOS] and you were allocated a MACOS machine your sadness would be 2), we want to minimise the total sadness of all people. If we allocate someone a laptop with an operating system not in their preferred list, treat them as having a sadness of 100.
